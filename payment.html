@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - CLICKART</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .payment-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .payment-header h1 {
+            color: #4f46e5;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-method {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .payment-method:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-method.active {
+            border-color: #4f46e5;
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .payment-method img {
+            max-width: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .payment-method h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-method p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .payment-details {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .payment-details h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .order-summary {
+            margin-bottom: 2rem;
+        }
+
+        .order-summary h3 {
+            color: #4f46e5;
+            margin-bottom: 1rem;
+        }
+
+        .order-items {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 1rem 0;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .phonepe-form {
+            display: none;
+        }
+
+        .phonepe-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .pay-button {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        #paypal-button-container {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1>Complete Your Payment</h1>
+            <p>Choose your preferred payment method</p>
+        </div>
+
+        <div class="payment-methods">
+            <div class="payment-method" data-method="phonepe">
+                <img src="https://www.phonepe.com/webstatic/phonepe-logo.png" alt="PhonePe">
+                <h3>PhonePe</h3>
+                <p>Pay using UPI, Cards, or Wallet</p>
+            </div>
+            <div class="payment-method" data-method="paypal">
+                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal">
+                <h3>PayPal</h3>
+                <p>Pay using PayPal account or card</p>
+            </div>
+        </div>
+
+        <div class="payment-details">
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                <ul class="order-items" id="orderItems">
+                    <!-- Order items will be dynamically added here -->
+                </ul>
+                <div class="order-total">
+                    <span>Total Amount:</span>
+                    <span id="totalAmount">₹0</span>
+                </div>
+            </div>
+
+            <!-- PhonePe Payment Form -->
+            <div class="phonepe-form" id="phonepeForm">
+                <h2>PhonePe Payment</h2>
+                <form id="phonepePaymentForm">
+                    <div class="form-group">
+                        <label for="phonepePhone">Phone Number</label>
+                        <input type="tel" id="phonepePhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phonepeUpi">UPI ID</label>
+                        <input type="text" id="phonepeUpi" required>
+                    </div>
+                    <button type="submit" class="pay-button">Pay with PhonePe</button>
+                </form>
+            </div>
+
+            <!-- PayPal Button Container -->
+            <div id="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // Load order details from localStorage
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const orderItems = document.getElementById('orderItems');
+        const totalAmount = document.getElementById('totalAmount');
+
+        // Calculate total and display order items
+        let total = 0;
+        cartItems.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'order-item';
+            li.innerHTML = `
+                <span>${item.name} x ${item.quantity}</span>
+                <span>₹${(item.price * item.quantity).toLocaleString()}</span>
+            `;
+            orderItems.appendChild(li);
+            total += item.price * item.quantity;
+        });
+        totalAmount.textContent = `₹${total.toLocaleString()}`;
+
+        // Payment method selection
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const phonepeForm = document.getElementById('phonepeForm');
+        const paypalContainer = document.getElementById('paypal-button-container');
+
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', () => {
+                paymentMethods.forEach(m => m.classList.remove('active'));
+                method.classList.add('active');
+
+                if (method.dataset.method === 'phonepe') {
+                    phonepeForm.classList.add('active');
+                    paypalContainer.style.display = 'none';
+                } else {
+                    phonepeForm.classList.remove('active');
+                    paypalContainer.style.display = 'block';
+                }
+            });
+        });
+
+        // PhonePe Payment Form Submission
+        document.getElementById('phonepePaymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phonepePhone').value;
+            const upi = document.getElementById('phonepeUpi').value;
+
+            try {
+                // In a real implementation, you would call the PhonePe API here
+                // This is a mock implementation
+                const response = await mockPhonePePayment(phone, upi, total);
+                
+                if (response.success) {
+                    // Create order
+                    const orderId = createOrder(cartItems);
+                    alert(`Payment successful! Order ID: ${orderId}`);
+                    window.location.href = 'orders.html';
+                } else {
+                    alert('Payment failed. Please try again.');
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+                console.error(error);
+            }
+        });
+
+        // Mock PhonePe Payment Function
+        async function mockPhonePePayment(phone, upi, amount) {
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Simulate successful payment
+            return {
+                success: true,
+                transactionId: 'TXN' + Date.now().toString().slice(-8),
+                amount: amount
+            };
+        }
+
+        // PayPal Integration
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: (total / 83).toFixed(2) // Convert INR to USD (approximate)
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Create order
+                    const orderId = createOrder(cartItems);
+                    alert(`Payment successful! Order ID: ${orderId}`);
+                    window.location.href = 'orders.html';
+                });
+            },
+            onError: function(err) {
+                alert('Payment failed. Please try again.');
+                console.error(err);
+            }
+        }).render('#paypal-button-container');
+
+        // Create order function
+        function createOrder(cartItems) {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const orderId = 'ORD' + Date.now().toString().slice(-6);
+            const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            const order = {
+                id: orderId,
+                date: new Date().toISOString(),
+                status: 'pending',
+                items: cartItems,
+                total: total
+            };
+            
+            orders.unshift(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            
+            // Clear cart
+            localStorage.removeItem('cartItems');
+            
+            return orderId;
+        }
+
+        // Check if user is logged in
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('Please login to proceed with payment');
+            window.location.href = 'auth.html';
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            color: #f8f9fa;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .nav-link.active {
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-3">
+                <h3 class="mb-4">Admin Panel</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="minip.html">Home Page</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-section="dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="users">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="orders">Orders</a>
+                    </li>
+                    <li class="nav-item mt-auto">
+                        <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="section">
+                    <h2>Dashboard</h2>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Users</h5>
+                                    <p class="card-text" id="totalUsers">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Products</h5>
+                                    <p class="card-text" id="totalProducts">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Orders</h5>
+                                    <p class="card-text" id="totalOrders">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users" class="section" style="display: none;">
+                    <h2>User Management</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Products Section -->
+                <div id="products" class="section" style="display: none;">
+                    <h2>Product Management</h2>
+                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                        Add New Product
+                    </button>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="orders" class="section" style="display: none;">
+                    <h2>Order Management</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm">
+                        <div class="mb-3">
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="productName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productPrice" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="productPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productStock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="productStock" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productImage" class="form-label">Image URL</label>
+                            <input type="text" class="form-control" id="productImage" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveProductBtn">Save Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add encryption/decryption functions
+        async function encryptData(data, key) {
+            const encoder = new TextEncoder();
+            const encodedData = encoder.encode(JSON.stringify(data));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const keyBuffer = await crypto.subtle.importKey(
+                'raw',
+                encoder.encode(key),
+                { name: 'AES-GCM' },
+                false,
+                ['encrypt']
+            );
+            const encryptedData = await crypto.subtle.encrypt(
+                { name: 'AES-GCM', iv },
+                keyBuffer,
+                encodedData
+            );
+            return {
+                iv: Array.from(iv).map(b => b.toString(16).padStart(2, '0')).join(''),
+                data: Array.from(new Uint8Array(encryptedData)).map(b => b.toString(16).padStart(2, '0')).join('')
+            };
+        }
+
+        async function decryptData(encryptedData, key) {
+            const encoder = new TextEncoder();
+            const decoder = new TextDecoder();
+            const iv = new Uint8Array(encryptedData.iv.match(/.{2}/g).map(byte => parseInt(byte, 16)));
+            const data = new Uint8Array(encryptedData.data.match(/.{2}/g).map(byte => parseInt(byte, 16)));
+            const keyBuffer = await crypto.subtle.importKey(
+                'raw',
+                encoder.encode(key),
+                { name: 'AES-GCM' },
+                false,
+                ['decrypt']
+            );
+            const decryptedData = await crypto.subtle.decrypt(
+                { name: 'AES-GCM', iv },
+                keyBuffer,
+                data
+            );
+            return JSON.parse(decoder.decode(decryptedData));
+        }
+
+        // Check if user is admin and session is valid
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser || !currentUser.isAdmin || !currentUser.token || currentUser.expires < Date.now()) {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'auth.html';
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = e.target.dataset.section;
+                document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+                document.getElementById(section).style.display = 'block';
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+
+        // Load dashboard data with encrypted storage
+        async function loadDashboardData() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+            // Encrypt sensitive user data
+            const encryptedUsers = await Promise.all(users.map(async user => {
+                const encryptedData = await encryptData({
+                    name: user.name,
+                    email: user.email,
+                    isAdmin: user.isAdmin
+                }, currentUser.token);
+                return encryptedData;
+            }));
+
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+        }
+
+        // Load users table with encrypted data
+        async function loadUsersTable() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+
+            for (const user of users) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.isAdmin ? 'Admin' : 'User'}</td>
+                    <td>
+                        ${!user.isAdmin ? `<button class="btn btn-sm btn-success" onclick="makeAdmin('${user.email}')">Make Admin</button>` : ''}
+                        <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.email}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+
+        // Load products table
+        function loadProductsTable() {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = '';
+
+            products.forEach(product => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>$${product.price}</td>
+                    <td>${product.stock}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editProduct(${product.id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Load orders table
+        function loadOrdersTable() {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const tbody = document.getElementById('ordersTableBody');
+            tbody.innerHTML = '';
+
+            orders.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.customerName}</td>
+                    <td>$${order.total}</td>
+                    <td>${order.status}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="viewOrder(${order.id})">View</button>
+                        <button class="btn btn-sm btn-success" onclick="updateOrderStatus(${order.id})">Update Status</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Save new product with encryption
+        document.getElementById('saveProductBtn').addEventListener('click', async () => {
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const stock = parseInt(document.getElementById('productStock').value);
+            const image = document.getElementById('productImage').value;
+
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const newProduct = {
+                id: products.length + 1,
+                name,
+                price,
+                stock,
+                image
+            };
+
+            products.push(newProduct);
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            loadProductsTable();
+            loadDashboardData();
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
+            modal.hide();
+        });
+
+        // Delete user with validation
+        async function deleteUser(email) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const updatedUsers = users.filter(user => user.email !== email);
+                localStorage.setItem('users', JSON.stringify(updatedUsers));
+                loadUsersTable();
+                loadDashboardData();
+            }
+        }
+
+        // Delete product with validation
+        async function deleteProduct(id) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                const updatedProducts = products.filter(product => product.id !== id);
+                localStorage.setItem('products', JSON.stringify(updatedProducts));
+                loadProductsTable();
+                loadDashboardData();
+            }
+        }
+
+        // Logout with session cleanup
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'auth.html';
+        });
+
+        // Session timeout check
+        setInterval(() => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser && currentUser.expires < Date.now()) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'auth.html';
+            }
+        }, 60000); // Check every minute
+
+        // Make user admin
+        async function makeAdmin(email) {
+            if (confirm('Are you sure you want to make this user an admin?')) {
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const updatedUsers = users.map(user => {
+                    if (user.email === email) {
+                        return { ...user, isAdmin: true };
+                    }
+                    return user;
+                });
+                localStorage.setItem('users', JSON.stringify(updatedUsers));
+                loadUsersTable();
+                alert('User has been promoted to admin successfully!');
+            }
+        }
+
+        // Initial load
+        loadDashboardData();
+        loadUsersTable();
+        loadProductsTable();
+        loadOrdersTable();
+    </script>
+</body>
+</html> 

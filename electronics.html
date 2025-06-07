@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronics - E-Commerce Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .product-info p {
+            color: #4f46e5;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+        }
+
+        .btn.added {
+            background: #10b981;
+        }
+
+        .page-title {
+            text-align: center;
+            margin: 2rem 0;
+            color: #1f2937;
+            font-size: 2rem;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .footer-section h3 {
+            color: #fff;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #fff;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: #9ca3af;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            z-index: 1;
+            color: white;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            animation: pulse 2s infinite;
+            color: white;
+            background: none;
+            box-shadow: none;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 1px;
+            color: white;
+            -webkit-text-fill-color: white;
+            text-shadow: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-left">
+                <a href="minip.html" class="logo">
+                    <div class="logo-icon">✨</div>
+                    <div class="logo-text">CLICKART</div>
+                </a>
+                <div class="nav-links">
+                    <a href="minip.html">Home</a>
+                    <a href="products.html">Products</a>
+                    <a href="categories.html">Categories</a>
+                    <a href="clothing.html">Clothing</a>
+                    <a href="shoes.html">Shoes</a>
+                    <a href="electronics.html" class="active">Electronics</a>
+                    <a href="cosmetics.html">Cosmetics</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="cart-icon">
+                <a href="cart.html" style="color: white; text-decoration: none;">🛒</a>
+                <span class="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <h2 class="page-title">Electronics</h2>
+    <p class="category-header">Gadgets, Devices, and Tech Accessories</p>
+
+    <main class="products">
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?w=500&auto=format" alt="Latest Smartphone" class="product-image">
+            <div class="product-info">
+                <h3>Latest Smartphone</h3>
+                <p>₹49,999</p>
+                <button class="btn">Add to Cart</button>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/18105/pexels-photo.jpg?w=500&auto=format" alt="Ultra-thin Laptop" class="product-image">
+            <div class="product-info">
+                <h3>Ultra-thin Laptop</h3>
+                <p>₹65,999</p>
+                <button class="btn">Add to Cart</button>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?w=500&auto=format" alt="Smart Watch" class="product-image">
+            <div class="product-info">
+                <h3>Smart Watch</h3>
+                <p>₹24,999</p>
+                <button class="btn">Add to Cart</button>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/1334597/pexels-photo-1334597.jpeg?w=500&auto=format" alt="10-inch Tablet" class="product-image">
+            <div class="product-info">
+                <h3>10-inch Tablet</h3>
+                <p>₹35,999</p>
+                <button class="btn">Add to Cart</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Order Tracking</a></li>
+                    <li><a href="#">Wishlist</a></li>
+                    <li><a href="#">Gift Cards</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#">📱</a>
+                    <a href="#">📸</a>
+                    <a href="#">🐦</a>
+                    <a href="#">💼</a>
+                </div>
+                <p style="margin-top: 1rem; color: #9ca3af;">
+                    Subscribe to our newsletter for updates and exclusive offers!
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 E-Commerce Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const buttons = document.querySelectorAll('.btn');
+        const cartCount = document.querySelector('.cart-count');
+        let count = 0;
+
+        // Load cart count from localStorage
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedCart = localStorage.getItem('cartItems');
+            if (savedCart) {
+                const cartItems = JSON.parse(savedCart);
+                count = cartItems.length;
+                cartCount.textContent = count;
+            }
+        });
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                count++;
+                cartCount.textContent = count;
+                cartCount.classList.add('updated');
+                
+                button.textContent = '✓ Added to Cart';
+                button.classList.add('added');
+                
+                // Get product details
+                const productCard = button.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = parseInt(productCard.querySelector('p').textContent.replace('₹', '').replace(',', ''));
+                const productImage = productCard.querySelector('img').src;
+                
+                // Add to cart in localStorage
+                const savedCart = localStorage.getItem('cartItems') || '[]';
+                const cartItems = JSON.parse(savedCart);
+                
+                // Check if product already exists in cart
+                const existingItem = cartItems.find(item => item.name === productName);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cartItems.push({
+                        name: productName,
+                        price: productPrice,
+                        image: productImage,
+                        quantity: 1
+                    });
+                }
+                
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                
+                setTimeout(() => {
+                    button.textContent = 'Add to Cart';
+                    button.classList.remove('added');
+                    cartCount.classList.remove('updated');
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html> 

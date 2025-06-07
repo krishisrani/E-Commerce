@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management - CLICKART</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-style: italic;
+        }
+
+        .orders-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .orders-header {
+            margin-bottom: 2rem;
+        }
+
+        .orders-header h1 {
+            color: #4f46e5;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .orders-header p {
+            color: #6b7280;
+        }
+
+        .order-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .order-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            color: #6b7280;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .order-tab.active {
+            color: #4f46e5;
+            background-color: rgba(79, 70, 229, 0.1);
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #4f46e5;
+        }
+
+        .order-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-processing {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-shipped {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-delivered {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+
+        .order-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .order-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .order-item-price {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .order-total {
+            font-weight: 600;
+            color: #4f46e5;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4f46e5;
+            border: 1px solid #4f46e5;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .no-orders h2 {
+            color: #4f46e5;
+            margin-bottom: 1rem;
+        }
+
+        .no-orders p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+
+        .tracking-progress {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f3f4f6;
+            border-radius: 8px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e5e7eb;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .progress-step.active {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .progress-step.completed {
+            background: #10b981;
+            color: white;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .progress-label {
+            text-align: center;
+            width: 25%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-left">
+                <a href="minip.html" class="logo">
+                    <div class="logo-icon">✨</div>
+                    <div class="logo-text">CLICKART</div>
+                </a>
+            </div>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="minip.html">Home</a>
+                    <a href="categories.html">Categories</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="history.html">History</a>
+                    <a href="#" id="authLink">Login</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="orders-container">
+        <div class="orders-header">
+            <h1>Your Orders</h1>
+            <p>Track and manage your orders</p>
+        </div>
+
+        <div class="order-tabs">
+            <div class="order-tab active" data-tab="all">All Orders</div>
+            <div class="order-tab" data-tab="pending">Pending</div>
+            <div class="order-tab" data-tab="processing">Processing</div>
+            <div class="order-tab" data-tab="shipped">Shipped</div>
+            <div class="order-tab" data-tab="delivered">Delivered</div>
+        </div>
+
+        <div id="ordersList">
+            <!-- Orders will be dynamically added here -->
+        </div>
+
+        <div class="no-orders" id="noOrders" style="display: none;">
+            <h2>No Orders Yet</h2>
+            <p>Your orders will appear here</p>
+            <a href="minip.html" class="btn btn-primary">Start Shopping</a>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const authLink = document.getElementById('authLink');
+        
+        if (currentUser) {
+            authLink.textContent = currentUser.name;
+            authLink.href = '#';
+            authLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('Do you want to logout?')) {
+                    localStorage.removeItem('currentUser');
+                    window.location.reload();
+                }
+            });
+        } else {
+            authLink.href = 'auth.html';
+        }
+
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.order-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                loadOrders(tab.dataset.tab);
+            });
+        });
+
+        // Load and display orders
+        const ordersList = document.getElementById('ordersList');
+        const noOrders = document.getElementById('noOrders');
+        
+        function loadOrders(filter = 'all') {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const filteredOrders = filter === 'all' 
+                ? orders 
+                : orders.filter(order => order.status === filter);
+            
+            if (filteredOrders.length === 0) {
+                ordersList.style.display = 'none';
+                noOrders.style.display = 'block';
+                return;
+            }
+            
+            ordersList.style.display = 'block';
+            noOrders.style.display = 'none';
+            
+            ordersList.innerHTML = '';
+            
+            filteredOrders.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
+                
+                const orderDate = new Date(order.date);
+                const formattedDate = orderDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                const statusClass = `status-${order.status}`;
+                const statusText = order.status.charAt(0).toUpperCase() + order.status.slice(1);
+                
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #${order.id}</div>
+                            <div class="order-date">${formattedDate}</div>
+                        </div>
+                        <div class="order-status ${statusClass}">${statusText}</div>
+                    </div>
+                    
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <img src="${item.image}" alt="${item.name}">
+                                <div class="order-item-details">
+                                    <div class="order-item-name">${item.name}</div>
+                                    <div class="order-item-price">₹${item.price.toLocaleString()} x ${item.quantity}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="tracking-progress">
+                        <div class="progress-steps">
+                            <div class="progress-step ${order.status === 'pending' ? 'active' : order.status === 'processing' || order.status === 'shipped' || order.status === 'delivered' ? 'completed' : ''}">1</div>
+                            <div class="progress-step ${order.status === 'processing' ? 'active' : order.status === 'shipped' || order.status === 'delivered' ? 'completed' : ''}">2</div>
+                            <div class="progress-step ${order.status === 'shipped' ? 'active' : order.status === 'delivered' ? 'completed' : ''}">3</div>
+                            <div class="progress-step ${order.status === 'delivered' ? 'completed' : ''}">4</div>
+                        </div>
+                        <div class="progress-labels">
+                            <div class="progress-label">Pending</div>
+                            <div class="progress-label">Processing</div>
+                            <div class="progress-label">Shipped</div>
+                            <div class="progress-label">Delivered</div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-footer">
+                        <div class="order-total">Total: ₹${order.total.toLocaleString()}</div>
+                        <div class="order-actions">
+                            <button class="btn btn-secondary" onclick="trackOrder('${order.id}')">Track Order</button>
+                            <button class="btn btn-primary" onclick="viewOrderDetails('${order.id}')">View Details</button>
+                        </div>
+                    </div>
+                `;
+                
+                ordersList.appendChild(orderCard);
+            });
+        }
+        
+        function trackOrder(orderId) {
+            // In a real application, this would redirect to a tracking page
+            alert(`Tracking order #${orderId}`);
+        }
+        
+        function viewOrderDetails(orderId) {
+            // In a real application, this would show a detailed view of the order
+            alert(`Viewing details for order #${orderId}`);
+        }
+        
+        // Load orders when page loads
+        loadOrders();
+    </script>
+</body>
+</html> 
